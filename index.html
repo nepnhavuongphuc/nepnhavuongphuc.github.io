@@ -61,7 +61,10 @@ section{padding:4.5rem 0 1rem;scroll-margin-top:1rem}
 .anh img{z-index:1}
 .card:hover .anh{transform:translateY(-4px);box-shadow:0 14px 28px -14px rgba(46,74,67,.45)}
 .ten{display:block;margin-top:.8rem;font-size:.98rem;text-align:center}
-.xem{display:block;text-align:center;font-size:.85rem;color:var(--dong)}
+.card.an{display:none}
+.grid.mo .card.an{display:block}
+.tatca{display:block;margin:2.2rem auto 0;padding:.65rem 2rem;font:inherit;font-size:.95rem;color:var(--ngoc);background:transparent;border:1px solid var(--dong);border-radius:999px;cursor:pointer;transition:background .25s,color .25s}
+.tatca:hover{background:var(--dong);color:#fff}
 
 footer{text-align:center;padding:3rem 1.5rem 3.5rem;font-size:.85rem;color:var(--da);border-top:1px solid rgba(126,154,138,.3)}
 footer b{display:block;font-family:var(--serif);font-weight:500;font-size:1.4rem;color:var(--ngoc);margin-bottom:.4rem}
@@ -133,32 +136,53 @@ const SAN_PHAM = {
     { ten: "Nhang trầm hương",   anh: "images/xong-nha-1.jpg", link: "https://shopee.vn/" },
     { ten: "Nụ quế xông nhà",    anh: "images/xong-nha-2.jpg", link: "https://shopee.vn/" },
     { ten: "Thác khói trầm",     anh: "images/xong-nha-3.jpg", link: "https://shopee.vn/" },
-    { ten: "Thảo mộc xông thơm", anh: "images/xong-nha-4.jpg", link: "https://shopee.vn/" }
+    { ten: "Thảo mộc xông thơm", anh: "images/xong-nha-4.jpg", link: "https://shopee.vn/" },
+    { ten: "Tinh dầu sả chanh",  anh: "images/xong-nha-5.jpg", link: "https://shopee.vn/" },
+    { ten: "Lư xông trầm gốm",   anh: "images/xong-nha-6.jpg", link: "https://shopee.vn/" }
   ],
   "grid-da-phong-thuy": [
     { ten: "Vòng tay thạch anh", anh: "images/da-1.jpg", link: "https://shopee.vn/" },
     { ten: "Cụm thạch anh tím",  anh: "images/da-2.jpg", link: "https://shopee.vn/" },
     { ten: "Cây tiền đá",        anh: "images/da-3.jpg", link: "https://shopee.vn/" },
-    { ten: "Tỳ hưu đá",          anh: "images/da-4.jpg", link: "https://shopee.vn/" }
+    { ten: "Tỳ hưu đá",          anh: "images/da-4.jpg", link: "https://shopee.vn/" },
+    { ten: "Mặt dây chuyền đá",  anh: "images/da-5.jpg", link: "https://shopee.vn/" },
+    { ten: "Quả cầu đá",         anh: "images/da-6.jpg", link: "https://shopee.vn/" }
   ],
   "grid-trang-phuc": [
     { ten: "Áo dài cách tân",    anh: "images/trang-phuc-1.jpg", link: "https://shopee.vn/" },
     { ten: "Đầm lụa tông trầm",  anh: "images/trang-phuc-2.jpg", link: "https://shopee.vn/" },
     { ten: "Áo linen thoáng mát",anh: "images/trang-phuc-3.jpg", link: "https://shopee.vn/" },
-    { ten: "Khăn lụa họa tiết",  anh: "images/trang-phuc-4.jpg", link: "https://shopee.vn/" }
+    { ten: "Khăn lụa họa tiết",  anh: "images/trang-phuc-4.jpg", link: "https://shopee.vn/" },
+    { ten: "Chân váy xếp ly",    anh: "images/trang-phuc-5.jpg", link: "https://shopee.vn/" },
+    { ten: "Áo khoác mỏng",      anh: "images/trang-phuc-6.jpg", link: "https://shopee.vn/" }
   ]
 };
 
+const SO_HIEN_SAN = 4; // số sản phẩm hiện sẵn, từ sản phẩm thứ 5 sẽ ẩn sau "Xem tất cả"
+
 for (const [id, ds] of Object.entries(SAN_PHAM)) {
   const grid = document.getElementById(id);
-  grid.innerHTML = ds.map(p => `
-    <a class="card" href="${p.link}" target="_blank" rel="nofollow sponsored noopener" aria-label="${p.ten} - xem trên Shopee">
+  grid.innerHTML = ds.map((p, i) => `
+    <a class="card${i >= SO_HIEN_SAN ? " an" : ""}" href="${p.link}" target="_blank" rel="nofollow sponsored noopener" aria-label="${p.ten} - xem trên Shopee">
       <div class="anh" data-ten="${p.ten}">
         <img src="${p.anh}" alt="${p.ten}" loading="lazy" onerror="this.remove()">
       </div>
       <span class="ten">${p.ten}</span>
-      <span class="xem">Xem trên Shopee</span>
     </a>`).join("");
+
+  if (ds.length > SO_HIEN_SAN) {
+    const nut = document.createElement("button");
+    nut.type = "button";
+    nut.className = "tatca";
+    nut.textContent = "Xem tất cả";
+    nut.setAttribute("aria-expanded", "false");
+    nut.addEventListener("click", () => {
+      const mo = grid.classList.toggle("mo");
+      nut.textContent = mo ? "Thu gọn" : "Xem tất cả";
+      nut.setAttribute("aria-expanded", mo);
+    });
+    grid.after(nut);
+  }
 }
 </script>
 </body>
